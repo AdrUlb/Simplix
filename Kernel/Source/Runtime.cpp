@@ -2,29 +2,33 @@
 
 #include <cstdint>
 
-#include "Cpu.hpp"
 #include "Silly/Macros.hpp"
-
-using InitFiniFunc = void(*)();
-
-extern InitFiniFunc initArray[] asm("INIT_ARRAY_START");
-extern InitFiniFunc initArrayEnd[] asm("INIT_ARRAY_END");
-
-extern InitFiniFunc finiArray[] asm("INIT_ARRAY_START");
-extern InitFiniFunc finiArrayEnd[] asm("INIT_ARRAY_END");
 
 namespace Kernel::Runtime
 {
+	using InitFiniFunc = void(*)();
+
+	extern InitFiniFunc initArray[] asm("INIT_ARRAY_START");
+	extern InitFiniFunc initArrayEnd[] asm("INIT_ARRAY_END");
+
+	extern InitFiniFunc finiArray[] asm("FINI_ARRAY_START");
+	extern InitFiniFunc finiArrayEnd[] asm("FINI_ARRAY_END");
+
 	void Init()
 	{
 		for (auto func = initArray; func < initArrayEnd; func++)
 			(*func)();
+
+		// Prevent the compiler from doing some silly reordering
+		asm volatile("" : : : "memory");
 	}
 
 	void Fini()
 	{
-		for (auto func = finiArray; func < finiArrayEnd; func++)
-			(*func)();
+		asm volatile("" : : : "memory");
+
+		for (auto func = finiArrayEnd; func > finiArray; func--)
+			(*(func - 1))();
 	}
 }
 
@@ -46,6 +50,7 @@ __attribute__((aligned(16))) static uint8_t failStack[4096];
 
 static NEVER_INLINE RARELY_USED NORETURN void OnStackCheckFail()
 {
+	// TODO: message "stack smashing detected"
 	VERIFY_NOT_REACHED();
 }
 
@@ -61,17 +66,17 @@ USED NAKED NORETURN void __stack_chk_fail() // NOLINT(*-reserved-identifier)
 		"call %1\n"
 		"hlt"
 		:
-		: "i"(failStack + 4096), "i"(OnStackCheckFail)
+		: "ir"(failStack + 4096), "ir"(OnStackCheckFail)
 		: "memory"
 	);
 #elif defined(__i386__)
 	asm volatile(
 		"cli\n"
-		"mov rsp, %0\n"
+		"mov esp, %0\n"
 		"call %1\n"
 		"hlt"
 		:
-		: "i"(failStack + 4096), "i"(OnStackCheckFail)
+		: "ir"(failStack + 4096), "ir"(OnStackCheckFail)
 		: "memory"
 	);
 #else
