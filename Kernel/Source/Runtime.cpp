@@ -13,7 +13,7 @@ extern InitFiniFunc initArrayEnd[] asm("INIT_ARRAY_END");
 extern InitFiniFunc finiArray[] asm("INIT_ARRAY_START");
 extern InitFiniFunc finiArrayEnd[] asm("INIT_ARRAY_END");
 
-namespace Runtime
+namespace Kernel::Runtime
 {
 	void Init()
 	{

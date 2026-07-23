@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Runtime
+namespace Kernel::Runtime
 {
 	void Init();
 	void Fini();
