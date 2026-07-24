@@ -34,7 +34,7 @@ namespace Kernel::Runtime
 
 extern "C" NEVER_INLINE RARELY_USED NORETURN void abort()
 {
-	VERIFY_NOT_REACHED();
+	VERIFY_NOT_REACHED("abort() was called");
 }
 
 #if UINT64_MAX == UINTPTR_MAX
@@ -51,8 +51,7 @@ static constexpr auto failStackBottom = failStack + sizeof(failStack);
 
 static NEVER_INLINE RARELY_USED NORETURN void OnStackCheckFail()
 {
-	// TODO: message "stack smashing detected"
-	VERIFY_NOT_REACHED();
+	VERIFY_NOT_REACHED("stack smashing detected");
 }
 
 extern "C"

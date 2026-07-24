@@ -13,7 +13,7 @@ NEVER_INLINE RARELY_USED void Silly::Extern::VerifyFailed(const char* condition,
 	IGNORE(location);
 	/*
 	std::print(stderr,
-			   "A fatal error occured! The following expression evaluated to false: {}\n"
+			   "A fatal error occured: {}\n"
 			   "  in {}:{}:{}\n"
 			   "  function: {}\n",
 			   condition,
