@@ -5,6 +5,7 @@
 #include "Cpu.hpp"
 #include "Loader.hpp"
 #include "Runtime.hpp"
+#include "X86.hpp"
 #include "Sync/Lock.hpp"
 #include "Sync/Waiter.hpp"
 #endif

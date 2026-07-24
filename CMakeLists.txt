@@ -36,6 +36,7 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_options(-Wno-unused-function -Wno-changes-meaning)
 add_compile_definitions(-DSILLY_GLOBAL)
 
 silly_library_define(Silly STATIC)
