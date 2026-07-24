@@ -63,21 +63,19 @@ USED NAKED NORETURN void __stack_chk_fail() // NOLINT(*-reserved-identifier)
 #if defined(__x86_64__)
 	asm volatile(
 		"cli\n"
-		"mov rsp, %0\n"
-		"call %1\n"
-		"hlt"
+		"mov rsp, %0 - 8\n" // NOTE: the stack is purposefully offset to account for the return address that isn't pushed by the following jump
+		"jmp %1\n" // OnStackCheckFail is NORETURN, we don't need to call
 		:
-		: "ir"(failStackBottom), "ir"(OnStackCheckFail)
+		: "i"(failStackBottom), "i"(OnStackCheckFail)
 		: "memory"
 	);
 #elif defined(__i386__)
 	asm volatile(
 		"cli\n"
-		"mov esp, %0\n"
-		"call %1\n"
-		"hlt"
+		"mov esp, %0 - 4\n" // NOTE: the stack is purposefully offset to account for the return address that isn't pushed by the following jump
+		"jmp %1\n" // OnStackCheckFail is NORETURN, we don't need to call
 		:
-		: "ir"(failStackBottom), "ir"(OnStackCheckFail)
+		: "i"(failStackBottom), "i"(OnStackCheckFail)
 		: "memory"
 	);
 #else
