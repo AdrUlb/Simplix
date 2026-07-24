@@ -46,7 +46,7 @@ extern "C" NEVER_INLINE RARELY_USED NORETURN void abort()
 #endif
 
 // Temporary stack, used on stack check failure to safely panic
-__attribute__((aligned(16))) static uint8_t failStack[4096];
+__attribute__((aligned(16))) static uint8_t failStack[16 * 1024];
 static constexpr auto failStackBottom = failStack + sizeof(failStack);
 
 static NEVER_INLINE RARELY_USED NORETURN void OnStackCheckFail()
