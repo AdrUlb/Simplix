@@ -13,7 +13,7 @@ target_compile_options(Kernel PRIVATE
 		$<$<COMPILE_LANGUAGE:CXX>:${CFLAGS} ${CXXFLAGS}>
 		$<$<COMPILE_LANGUAGE:ASM_NASM>:-Wall -w-reloc-rel-dword -w-reloc-abs-qword>
 )
-target_link_libraries(Kernel KSilly)
+target_link_libraries(Kernel KSilly gcc)
 simplix_add_kernel_options(Kernel)
 simplix_add_linker_script(Kernel ${CMAKE_CURRENT_SOURCE_DIR}/Link.ld)
 

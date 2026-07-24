@@ -11,6 +11,7 @@ NEVER_INLINE RARELY_USED void Silly::Extern::VerifyFailed(const char* condition,
 	// TODO
 	IGNORE(condition);
 	IGNORE(location);
+
 	/*
 	std::print(stderr,
 			   "A fatal error occured: {}\n"

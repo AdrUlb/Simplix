@@ -1,5 +1,7 @@
 #include "Serial.hpp"
 
+#include "Subsystems.hpp"
+
 // https://wiki.osdev.org/Serial_Ports
 namespace Kernel::Serial
 {
@@ -64,8 +66,18 @@ namespace Kernel::Serial
 		SetLineControl(port, lineControl);
 		SetFifo(port, fifoControl);
 		SetModemControl(port, modemControl);
-
-		for (auto str = "Serial initialized!\n"; *str; str++)
-			Send(PORT_COM1, *str);
 	}
+
+	static void InitCom1()
+	{
+		Init(PORT_COM1);
+	}
+
+	static void InitCom2()
+	{
+		Init(PORT_COM2);
+	}
+
+	INIT_SUBSYSTEM(serial_com1, InitCom1);
+	INIT_SUBSYSTEM(serial_com2, InitCom2);
 }

@@ -1,5 +1,6 @@
 #include "Runtime.hpp"
 
+#include <cstddef>
 #include <cstdint>
 
 #include "Silly/Macros.hpp"
@@ -30,6 +31,25 @@ namespace Kernel::Runtime
 		for (auto func = finiArrayEnd; func > finiArray; func--)
 			(*(func - 1))();
 	}
+}
+
+void* operator new(const size_t size)
+{
+	IGNORE(size);
+	VERIFY_NOT_REACHED("TODO: operator new()");
+}
+
+void operator delete(void* ptr)
+{
+	IGNORE(ptr);
+	VERIFY_NOT_REACHED("TODO: operator delete()");
+}
+
+void operator delete(void* ptr, const size_t size)
+{
+	IGNORE(ptr);
+	IGNORE(size);
+	VERIFY_NOT_REACHED("TODO: operator delete()");
 }
 
 extern "C" NEVER_INLINE RARELY_USED NORETURN void abort()
