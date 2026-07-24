@@ -11,7 +11,7 @@ target_include_directories(Kernel
 target_compile_options(Kernel PRIVATE
 		$<$<COMPILE_LANGUAGE:C>:${CFLAGS}>
 		$<$<COMPILE_LANGUAGE:CXX>:${CFLAGS} ${CXXFLAGS}>
-		$<$<COMPILE_LANGUAGE:ASM_NASM>:-Wall>
+		$<$<COMPILE_LANGUAGE:ASM_NASM>:-Wall -w-reloc-rel-dword -w-reloc-abs-qword>
 )
 target_link_libraries(Kernel KSilly)
 simplix_add_kernel_options(Kernel)
