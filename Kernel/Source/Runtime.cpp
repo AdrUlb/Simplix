@@ -47,6 +47,7 @@ extern "C" NEVER_INLINE RARELY_USED NORETURN void abort()
 
 // Temporary stack, used on stack check failure to safely panic
 __attribute__((aligned(16))) static uint8_t failStack[4096];
+static constexpr auto failStackBottom = failStack + sizeof(failStack);
 
 static NEVER_INLINE RARELY_USED NORETURN void OnStackCheckFail()
 {
@@ -66,7 +67,7 @@ USED NAKED NORETURN void __stack_chk_fail() // NOLINT(*-reserved-identifier)
 		"call %1\n"
 		"hlt"
 		:
-		: "ir"(failStack + 4096), "ir"(OnStackCheckFail)
+		: "ir"(failStackBottom), "ir"(OnStackCheckFail)
 		: "memory"
 	);
 #elif defined(__i386__)
@@ -76,7 +77,7 @@ USED NAKED NORETURN void __stack_chk_fail() // NOLINT(*-reserved-identifier)
 		"call %1\n"
 		"hlt"
 		:
-		: "ir"(failStack + 4096), "ir"(OnStackCheckFail)
+		: "ir"(failStackBottom), "ir"(OnStackCheckFail)
 		: "memory"
 	);
 #else
